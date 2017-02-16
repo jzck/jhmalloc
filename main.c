@@ -6,11 +6,11 @@ int		main(void)
 	printf("sizeof(long)=[%lu]\n", sizeof(long));
 	printf("sizeof(t_node)=[%lu]\n", sizeof(t_node));
 
-	void *ptr0 = malloc(16 * sizeof(long));
+	void *ptr0 = malloc(8190 * sizeof(long));
 	show_alloc_mem();
 	printf("\n");
 
-	void *ptr1 = malloc(32 * sizeof(long));
+	void *ptr1 = malloc(300 * sizeof(long));
 	show_alloc_mem();
 	printf("\n");
 
@@ -22,9 +22,9 @@ int		main(void)
 	/* show_alloc_mem(); */
 	/* printf("\n"); */
 
-	free(ptr0);
-	show_alloc_mem();
-	printf("\n");
+	/* free(ptr0); */
+	/* show_alloc_mem(); */
+	/* printf("\n"); */
 
 	free(ptr1);
 	show_alloc_mem();

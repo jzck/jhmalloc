@@ -7,18 +7,22 @@ t_node	*small_alloc = NULL;
 
 t_node	**find_node(t_node **node, size_t size)
 {
-	while (*node && (size_t)(*node)->size < sizeof(t_node) + size)
+	while (*node && (size_t)(*node)->size < size + HEADER_SIZE)
 		node = &(*node)->next;
 	return (node);
 }
 
 void	add_chunk(t_node **node_ref, size_t size)
 {
+	size_t	chunk_size;
+
 	while (*node_ref)
 		node_ref = &(*node_ref)->next;
-	*node_ref = mmap(NULL, malloc_N, PROT_READ|PROT_WRITE,
+	chunk_size = TINY(size) ? malloc_N : malloc_M;
+	printf("chunk_size=[%zu]\n", chunk_size);
+	*node_ref = mmap(NULL, (chunk_size +1) * 8, PROT_READ|PROT_WRITE,
 				MAP_ANON|MAP_PRIVATE, -1, 0);
-	(*node_ref)->size = TINY(size) ? malloc_N : malloc_M;
+	(*node_ref)->size = chunk_size;
 	(*node_ref)->next = NULL;
 }
 

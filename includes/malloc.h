@@ -2,7 +2,7 @@
 # define MALLOC_H
 
 # define malloc_n			64
-# define malloc_m			512
+# define malloc_m			1024
 # define malloc_N			(1 * getpagesize())
 # define malloc_M			(2 * getpagesize())
 # define malloc_magic		1234567
