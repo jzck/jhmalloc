@@ -21,6 +21,7 @@ OBJ_DIR		=	objs/
 
 SRC_BASE	=	\
 free.c\
+insert_node.c\
 malloc.c\
 show_alloc_mem.c
 
@@ -79,7 +80,7 @@ re:				fclean all
 relib:			fcleanlib $(LIBFT_LIB)
 
 test:
-	gcc -lft_malloc -L. -Iincludes -o myprogram main.c $(FLAGS)
+	gcc -lft_malloc -L. -Iincludes -o myprogram main.c
 
 .PHONY :		fclean clean re relib cleanlib fcleanlib
 

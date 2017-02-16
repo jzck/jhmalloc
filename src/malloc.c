@@ -22,21 +22,6 @@ void	add_chunk(t_node **node_ref, size_t size)
 	(*node_ref)->next = NULL;
 }
 
-void	mem_insert(t_node **head, t_node *new)
-{
-	while (*head)
-	{
-		if (new < *head)
-		{
-			new->next = *head;
-			*head = new;
-			return ;
-		}
-		head = &(*head)->next;
-	}
-	*head = new;
-}
-
 void	*split_node(t_node **free, t_node **alloc, size_t size)
 {
 	t_node		*new_alloc;
@@ -45,15 +30,16 @@ void	*split_node(t_node **free, t_node **alloc, size_t size)
 	free_size = (*free)->size;
 	/* printf("split now size=[%zu]\n", size); */
 	/* printf("free @ [%p], size=[%i]\n", *free, (*free)->size); */
-	/* printf("size + sizeof = [%lu]\n", size + HEADER_SIZE); */
+	/* printf("size = [%lu]\n", size + HEADER_SIZE); */
 	/* printf("alloc @ [%p]\n", *alloc); */
 	/* fflush(stdout); */
 	new_alloc = *free;
 	*(void**)free += 8 * (size + HEADER_SIZE);
+	/* printf("free @ [%p], size=[%i]\n", *free, (*free)->size); */
 	(*free)->size = free_size - (size + HEADER_SIZE);
 	new_alloc->size = size;
-	mem_insert(alloc, new_alloc);
-	return (*alloc + HEADER_SIZE);
+	insert_node(alloc, new_alloc);
+	return ((void*)new_alloc + HEADER_SIZE * 8);
 }
 
 void	*malloc(size_t size)

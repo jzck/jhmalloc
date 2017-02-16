@@ -36,5 +36,6 @@ void	*malloc(size_t size);
 void	*realloc(void *ptr, size_t size);
 void	show_alloc_mem(void);
 void	show_free_mem(void);
+void	insert_node(t_node **head, t_node *new);
 
 #endif

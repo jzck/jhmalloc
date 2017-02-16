@@ -13,7 +13,7 @@ void	print_free_mem(t_node *node)
 	size = node->size;
 	addr = (void*)node;
 	printf("\t%p - %p : %4zu byte%c\n",
-			addr, addr + 8 * size, size, size > 1 ? 's' : 0);
+			addr, (void*)addr + 8 * size, size, size > 1 ? 's' : 0);
 }
 
 void	print_alloc_mem(t_node *node)
@@ -22,9 +22,9 @@ void	print_alloc_mem(t_node *node)
 	void	*addr;
 
 	size = node->size;
-	addr = (void*)node + HEADER_SIZE;
+	addr = (void*)node + 8 * HEADER_SIZE;
 	printf("\t%p - %p : %4zu(+%zu) byte%c\n",
-			addr, addr + 8 * size, size, HEADER_SIZE, size > 1 ? 's' : 0);
+			addr, (void*)addr + 8 * size, size, HEADER_SIZE, size > 1 ? 's' : 0);
 }
 
 int		show_zone(t_node *node, int is_free)
@@ -35,7 +35,7 @@ int		show_zone(t_node *node, int is_free)
 	while (node)
 	{
 		is_free ? print_free_mem(node) : print_alloc_mem(node);
-		total += node->size + HEADER_SIZE;
+		total += node->size + (is_free ? 0 : HEADER_SIZE);
 		node = node->next;
 	}
 	return (total);
@@ -48,14 +48,14 @@ void	show_alloc_mem(void)
 
 	free_total = 0;
 	alloc_total = 0;
-	if (tiny_alloc)
+	if (tiny_alloc || tiny_zone)
 		ft_putstr("TINY:");
 	ft_putstr(FG_RED);
 	alloc_total += show_zone(tiny_alloc, 0);
 	ft_putstr(FG_GREEN);
 	free_total += show_zone(tiny_zone, 1);
 	ft_putstr(FG_DEFAULT);
-	if (small_alloc)
+	if (small_alloc || small_zone)
 		ft_putstr("SMALL:");
 	ft_putstr(FG_RED);
 	alloc_total += show_zone(small_alloc, 0);
