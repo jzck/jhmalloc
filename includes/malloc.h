@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   malloc.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/02/17 12:28:05 by jhalford          #+#    #+#             */
+/*   Updated: 2017/02/17 13:17:57 by jhalford         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MALLOC_H
 # define MALLOC_H
 
@@ -6,9 +18,7 @@
 # define malloc_N			(1 * getpagesize())
 # define malloc_M			(2 * getpagesize())
 # define malloc_magic		1234567
-# define malloc_realign(x)	((((x) + 1) / 8) * 8)
-# define malloc_bytes(x)	(((x) + 1) / 8)
-# define HEADER_SIZE		malloc_bytes(sizeof(t_node))
+# define HEADER_SIZE		(sizeof(t_node))
 # define TINY(x)			(x < (malloc_n + 1))
 # define SMALL(x)			(!TINY(x) && !LARGE(x))
 # define LARGE(x)			(malloc_m < x)
