@@ -6,11 +6,11 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:28:15 by jhalford          #+#    #+#             */
-/*   Updated: 2017/02/17 12:28:15 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/02/17 23:02:17 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "malloc_internal.h"
 
 void	insert_node(t_node **head, t_node *new)
 {

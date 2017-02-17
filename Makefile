@@ -6,8 +6,10 @@ NAME		=	libft_malloc.so
 ARCH_NAME	=	libft_malloc_$(HOSTTYPE).so
 
 CC			=	gcc
-FLAGS		=	-Wall -Wextra -Werror
-D_FLAGS		=	-g
+W_FLAGS		=	-Wall -Wextra -Werror
+V_FLAGS		=	-fvisibility=hidden
+D_FLAGS		=
+FLAGS		=	$(W_FLAGS) $(V_FLAGS) $(D_FLAGS)
 
 DELTA		=	$$(echo "$$(tput cols)-47"|bc)
 
@@ -34,13 +36,14 @@ all :
 	@make -j $(NAME)
 
 $(NAME): $(LIBFT_LIB) $(OBJ_DIR) $(OBJS)
-	@$(CC) --shared $(FLAGS) $(D_FLAGS) \
+	@$(CC) --shared $(FLAGS)\
 		-I $(INC_DIR) \
 		-I $(LIBFT_INC) \
 		$(LIBS) \
 		$(LIBFT_LIB) $(OBJS) \
 		-o $(ARCH_NAME)
 	@ln -fs $(ARCH_NAME) $(NAME)
+	@strip -x $(NAME)
 	@printf "\r\e[48;5;15;38;5;25m✅ MAKE $(ARCH_NAME)\e[0m\e[K\n"
 
 $(LIBFT_LIB):
@@ -56,7 +59,7 @@ $(OBJ_DIR)%.o :	$(SRC_DIR)%.c | $(OBJ_DIR)
 	@$(eval COLOR=$(shell echo $$(($(PERCENT)%35+196))))
 	@$(eval TO_DO=$(shell echo $$((20-$(INDEX)*20/$(NB)))))
 	@printf "\r\e[38;5;11m⌛ MAKE %10.10s : %2d%% \e[48;5;%dm%*s\e[0m%*s\e[48;5;255m \e[0m \e[38;5;11m %*s\e[0m\e[K" $(NAME) $(PERCENT) $(COLOR) $(DONE) "" $(TO_DO) "" $(DELTA) "$@"
-	@$(CC) $(FLAGS) $(D_FLAGS) -MMD -c $< -o $@\
+	@$(CC) $(FLAGS) -MMD -c $< -o $@\
 		-I $(INC_DIR)\
 		-I $(LIBFT_INC)
 	@$(eval INDEX=$(shell echo $$(($(INDEX)+1))))
@@ -80,7 +83,7 @@ re:				fclean all
 relib:			fcleanlib $(LIBFT_LIB)
 
 test:
-	gcc -lft_malloc -L. -Iincludes -o myprogram main.c
+	gcc -lft_malloc -L. -Iincludes -I$(LIBFT_INC) -o myprogram main.c
 
 .PHONY :		fclean clean re relib cleanlib fcleanlib
 

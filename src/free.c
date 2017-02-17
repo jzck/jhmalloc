@@ -6,11 +6,11 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:28:03 by jhalford          #+#    #+#             */
-/*   Updated: 2017/02/17 13:18:39 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/02/17 23:02:10 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "malloc_internal.h"
 
 int		remove_node(t_node **head, t_node *node)
 {

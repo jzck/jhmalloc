@@ -1,10 +1,8 @@
-#include "malloc.h"
+#include "includes/malloc.h"
+#include <stdio.h>
 
 int		main(void)
 {
-	printf("pagesize=[%i]\n", getpagesize());
-	printf("sizeof(long)=[%lu]\n", sizeof(long));
-
 	void *ptr0 = malloc(8150);
 	show_alloc_mem();
 	printf("\n");

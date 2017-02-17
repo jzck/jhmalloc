@@ -6,11 +6,11 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:28:02 by jhalford          #+#    #+#             */
-/*   Updated: 2017/02/17 13:18:34 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/02/17 23:02:14 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "malloc_internal.h"
 
 t_node	*tiny_zone = NULL;
 t_node	*small_zone = NULL;
@@ -63,7 +63,7 @@ void	*malloc(size_t size)
 	t_node		**node_ref;
 	void		*ptr;
 
-	printf("malloc(%zu) was called\n", size);
+	printf("malloc(%zu) called\n", size);
 	if (LARGE(size))
 	{
 		zone_ref = &large_zone;
