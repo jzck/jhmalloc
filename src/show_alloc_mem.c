@@ -6,7 +6,7 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:28:20 by jhalford          #+#    #+#             */
-/*   Updated: 2017/02/17 23:13:52 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/02/18 19:58:20 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,49 +19,34 @@ t_node	*tiny_alloc;
 t_node	*small_alloc;
 t_node	*large_alloc;
 
-void	print_free_mem(t_node *node)
+void	print_node(char color[7], t_node *node)
 {
-	size_t	size;
-	void	*addr;
-
-	size = node->size;
-	addr = (void*)node;
-	printf("\t%p - %p : %4zu byte%c\n",
-			addr, (void*)addr + size, size, size > 1 ? 's' : 0);
-}
-
-void	print_alloc_mem(t_node *node)
-{
-	size_t	size;
-	void	*addr;
-
-	size = node->size;
-	addr = (void*)node + HEADER_SIZE;
-	printf("\t%p - %p : %4zu(+%zu) byte%c\n",
-			addr, (void*)addr + size, size, HEADER_SIZE, size > 1 ? 's' : 0);
+	ft_putstr("\t");
+	ft_putstr(color);
+	ft_putaddr(node->data);
+	ft_putstr(" - ");
+	ft_putaddr(node->data + node->size);
+	ft_putstr(FBG_DEFAULT" : ");
+	ft_putnbr(node->size);
+	ft_putendl(" bytes");
 }
 
 void	show_alloc_zone(char *name, t_node *alloc, t_node *zone, size_t (*total)[3])
 {
 	if (alloc || zone)
-		printf("%s", name);
-	/* printf("%s", FG_RED); */
-	ft_putstr(FG_RED);
+		ft_putstr(name);
 	while (alloc)
 	{
-		print_alloc_mem(alloc);
+		print_node(FG_RED, alloc);
 		(*total)[1] += alloc->size;
-		(*total)[2] += HEADER_SIZE;
 		alloc = alloc->next;
 	}
-	printf("%s", FG_GREEN);
 	while (zone)
 	{
-		print_free_mem(zone);
+		print_node(FG_GREEN, zone);
 		(*total)[0] += zone->size;
 		zone = zone->next;
 	}
-	printf("%s", FG_DEFAULT);
 }
 
 void	show_alloc_mem(void)
@@ -70,13 +55,11 @@ void	show_alloc_mem(void)
 
 	total[0] = 0;
 	total[1] = 0;
-	total[2] = 0;
 	show_alloc_zone("TINY:", tiny_alloc, tiny_zone, &total);
 	show_alloc_zone("SMALL:", small_alloc, small_zone, &total);
 	show_alloc_zone("LARGE:", large_alloc, large_zone, &total);
 	printf("Total:");
 	printf("\t%7zu bytes free\n", total[0]);
 	printf("\t%7zu bytes allocated\n", total[1]);
-	printf("\t%7zu header bytes\n", total[2]);
-	printf("\t%7zu bytes mmap'd\n", total[0] + total[1] + total[2]);
+	printf("\t%7zu bytes mmap'd\n", total[0] + total[1]);
 }

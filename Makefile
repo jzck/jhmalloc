@@ -7,7 +7,7 @@ ARCH_NAME	=	libft_malloc_$(HOSTTYPE).so
 
 CC			=	gcc
 W_FLAGS		=	-Wall -Wextra -Werror
-V_FLAGS		=	-fvisibility=hidden
+V_FLAGS		=
 D_FLAGS		=
 FLAGS		=	$(W_FLAGS) $(V_FLAGS) $(D_FLAGS)
 
@@ -22,9 +22,12 @@ INC_DIR		=	includes/
 OBJ_DIR		=	objs/
 
 SRC_BASE	=	\
+error_lib.c\
 free.c\
-insert_node.c\
+get_zones.c\
 malloc.c\
+node_lib.c\
+realloc.c\
 show_alloc_mem.c
 
 SRCS		=	$(addprefix $(SRC_DIR), $(SRC_BASE))
@@ -85,6 +88,6 @@ relib:			fcleanlib $(LIBFT_LIB)
 test:
 	gcc -lft_malloc -L. -Iincludes -I$(LIBFT_INC) -o myprogram main.c
 
-.PHONY :		fclean clean re relib cleanlib fcleanlib
+.PHONY :		fclean clean re relib cleanlib fcleanlib $(LIBFT_LIB)
 
 -include $(OBJS:.o=.d)

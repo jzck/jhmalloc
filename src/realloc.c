@@ -1,28 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   insert_node.c                                      :+:      :+:    :+:   */
+/*   realloc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/02/17 12:28:15 by jhalford          #+#    #+#             */
-/*   Updated: 2017/02/17 23:02:17 by jhalford         ###   ########.fr       */
+/*   Created: 2017/02/18 13:23:20 by jhalford          #+#    #+#             */
+/*   Updated: 2017/02/18 18:08:11 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc_internal.h"
 
-void	insert_node(t_node **head, t_node *new)
+void	*realloc(void *ptr, size_t size)
 {
-	while (*head)
-	{
-		if (new < *head)
-		{
-			new->next = *head;
-			*head = new;
-			return ;
-		}
-		head = &(*head)->next;
-	}
-	*head = new;
+	ft_putendl("realloc called");
+	free(ptr);
+	return (malloc(size));
 }
