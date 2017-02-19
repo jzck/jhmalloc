@@ -56,9 +56,9 @@ int		remove_node(t_node **head, t_node *node)
 	while (*head)
 	{
 		ft_putstr("looking for node; diff=[");
-		ft_putaddr(node);
+		ft_putnbr_hex((long)node);
 		ft_putstr(",");
-		ft_putaddr(*head);
+		ft_putnbr_hex((long)*head);
 		ft_putendl("]");
 		if (*head == node)
 		{

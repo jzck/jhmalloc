@@ -41,12 +41,14 @@ void	free(void *ptr)
 	t_node	*node;
 
 	ft_putstr(FG_YELLOW"free(");
-	ft_putaddr(ptr);
+	ft_putnbr_hex((long)ptr);
 	ft_putendl(")"FG_DEFAULT);
 	if (!ptr)
 		return ;
 	node = ptr - HEADER_SIZE;
 	get_zones(&zone_ref, &alloc_ref, node->size);
+	ft_putstr("zone  @");
+	*zone_ref ? print_node(BG_MAGENTA, *zone_ref) : ft_putendl(" NULL");
 	if (remove_node(alloc_ref, node))
 	{
 		error_free_notalloc(ptr);
