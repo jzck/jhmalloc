@@ -31,6 +31,4 @@ void	get_zones(t_node ***zone_ref, t_node ***alloc_ref, size_t size)
 		*zone_ref = TINY(size) ? &tiny_zone : &small_zone;
 		*alloc_ref = TINY(size) ? &tiny_alloc : &small_alloc;
 	}
-	ft_putstr("zone  @");
-	**zone_ref ? print_node(BG_MAGENTA, **zone_ref) : ft_putendl(" NULL");
 }

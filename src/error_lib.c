@@ -22,7 +22,7 @@ void	error_free_notalloc(void *ptr)
 	ft_putstr_fd(", ??? ", fd);
 	ft_putstr_fd(")", fd);
 	ft_putstr_fd(" malloc: error for object ", fd);
-	ft_putaddr_fd(ptr, fd);
+	ft_putnbr_hex_fd((long)ptr, fd);
 	ft_putendl_fd(": pointer being freed was not allocated"FG_DEFAULT, fd);
 	/* exit(134); */
 }
