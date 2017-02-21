@@ -1,2 +1,3 @@
 myprogram
 *.o
+libft_malloc_*.so

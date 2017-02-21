@@ -7,7 +7,7 @@ ARCH_NAME	=	libft_malloc_$(HOSTTYPE).so
 
 CC			=	gcc
 W_FLAGS		=	-Wall -Wextra -Werror
-V_FLAGS		=
+V_FLAGS		=	-fvisibility=hidden
 D_FLAGS		=
 FLAGS		=	$(W_FLAGS) $(V_FLAGS) $(D_FLAGS)
 
@@ -22,13 +22,16 @@ INC_DIR		=	includes/
 OBJ_DIR		=	objs/
 
 SRC_BASE	=	\
+calloc.c\
 error_lib.c\
 free.c\
 get_zones.c\
 malloc.c\
 node_lib.c\
 realloc.c\
-show_alloc_mem.c
+reallocf.c\
+show_alloc_mem.c\
+valloc.c
 
 SRCS		=	$(addprefix $(SRC_DIR), $(SRC_BASE))
 OBJS		=	$(addprefix $(OBJ_DIR), $(SRC_BASE:.c=.o))

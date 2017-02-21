@@ -6,7 +6,7 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:28:15 by jhalford          #+#    #+#             */
-/*   Updated: 2017/02/18 20:08:46 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/02/21 16:07:24 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int		remove_node(t_node **head, t_node *node)
 {
 	while (*head)
 	{
-		ft_putstr("looking for node; diff=[");
+		ft_putstr("looking for node -> [");
 		ft_putnbr_hex((long)node);
 		ft_putstr(",");
 		ft_putnbr_hex((long)*head);

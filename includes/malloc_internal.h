@@ -6,7 +6,7 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 23:00:24 by jhalford          #+#    #+#             */
-/*   Updated: 2017/02/20 17:03:44 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/02/21 16:11:45 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,7 @@ extern t_node	*small_zone;
 extern t_node	*tiny_alloc;
 extern t_node	*small_alloc;
 
-# pragma GCC visibility push(default)
-
-void	free(void *ptr);
-void	*malloc(size_t size);
-void	*realloc(void *ptr, size_t size);
-void	show_alloc_mem(void);
-
-# pragma GCC visibility pop
+#include "malloc.h"
 
 void	get_zones(t_node ***zone_ref, t_node ***alloc_ref, size_t size);
 

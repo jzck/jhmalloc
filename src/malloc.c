@@ -6,7 +6,7 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:28:02 by jhalford          #+#    #+#             */
-/*   Updated: 2017/02/20 17:11:20 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/02/21 16:37:32 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ void	add_chunk(t_node **zone_ref, size_t size)
 	if (!(node = mmap(NULL, chunk_size, PROT_READ|PROT_WRITE,
 				MAP_ANON|MAP_PRIVATE, -1, 0)))
 		error_mmap();
-	ft_putstr("nchunk@");
 	node->size = chunk_size;
 	insert_node(zone_ref, node);
-	print_node(BG_GREEN, node);
+	/* ft_putstr("nchunk@"); */
+	/* print_node(BG_GREEN, node); */
 }
 
 void	*malloc(size_t size)
@@ -49,17 +49,20 @@ void	*malloc(size_t size)
 	ft_putstr(FG_YELLOW"malloc(");
 	ft_putnbr(size);
 	ft_putendl(")"FG_DEFAULT);
+
 	get_zones(&zone_ref, &alloc_ref, size);
 	while (!*(node_ref = find_node_firstfit(zone_ref, size)))
 		add_chunk(zone_ref, size);
-	ft_putstr("found @");
-	print_node(FG_GREEN, *node_ref);
+
+	/* ft_putstr("found @"); */
+	/* print_node(FG_GREEN, *node_ref); */
+
 	node = split_node(node_ref, alloc_ref, zone_ref, size);
 
 	ft_putstr("touser@");
 	print_node(FG_RED, node);
-	ft_putstr(FG_YELLOW"passing ");
-	ft_putnbr_hex((long)node->data);
-	ft_putendl(" to user"FG_DEFAULT);
+	/* ft_putstr("passing "FG_RED); */
+	/* ft_putnbr_hex((long)node->data); */
+	/* ft_putendl(FG_DEFAULT" to user"); */
 	return (node->data);
 }

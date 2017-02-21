@@ -1,30 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   malloc.h                                           :+:      :+:    :+:   */
+/*   valloc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/02/17 23:00:06 by jhalford          #+#    #+#             */
-/*   Updated: 2017/02/21 16:12:51 by jhalford         ###   ########.fr       */
+/*   Created: 2017/02/21 16:14:26 by jhalford          #+#    #+#             */
+/*   Updated: 2017/02/21 16:16:59 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MALLOC_H
-# define MALLOC_H
+#include "malloc_internal.h"
 
-#include "stdlib.h"
-
-# pragma GCC visibility push(default)
-
-void	*calloc(size_t count, size_t size);
-void	free(void *ptr);
-void	*malloc(size_t size);
-void	*realloc(void *ptr, size_t size);
-void	*reallocf(void *ptr, size_t size);
-void	*valloc(size_t size);
-void	show_alloc_mem(void);
-
-# pragma GCC visibility pop
-
-#endif
+void	*valloc(size_t size)
+{
+	(void)size;
+	ft_putstr("valloc() called\n");
+	return (NULL);
+}

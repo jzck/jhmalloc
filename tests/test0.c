@@ -1,0 +1,15 @@
+#include "../includes/malloc.h"
+
+int		main(void)
+{
+	int		i;
+	char	*addr;
+
+	i = 0;
+	valloc(42);
+	while (i < 1024)
+	{
+		i++;
+	}
+	return (0);
+}
