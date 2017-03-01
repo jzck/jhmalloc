@@ -6,7 +6,7 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 23:00:06 by jhalford          #+#    #+#             */
-/*   Updated: 2017/02/21 16:12:51 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/03/01 12:01:58 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 void	*calloc(size_t count, size_t size);
 void	free(void *ptr);
 void	*malloc(size_t size);
-void	*realloc(void *ptr, size_t size);
-void	*reallocf(void *ptr, size_t size);
-void	*valloc(size_t size);
+/* void	*realloc(void *ptr, size_t size); */
+/* void	*reallocf(void *ptr, size_t size); */
+/* void	*valloc(size_t size); */
 void	show_alloc_mem(void);
 
 # pragma GCC visibility pop

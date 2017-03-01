@@ -6,7 +6,7 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:28:03 by jhalford          #+#    #+#             */
-/*   Updated: 2017/02/21 16:36:51 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/03/01 12:04:36 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ void	free(void *ptr)
 	t_node	**alloc_ref;
 	t_node	*node;
 
-	ft_putstr(FG_YELLOW"free(");
-	ft_putnbr_hex((long)ptr);
-	ft_putendl(")"FG_DEFAULT);
+	/* ft_putstr(FG_YELLOW"free("); */
+	/* ft_putnbr_hex((long)ptr); */
+	/* ft_putendl(")"FG_DEFAULT); */
 	if (!ptr)
 		return ;
 	node = ptr - HEADER_SIZE;
@@ -51,7 +51,7 @@ void	free(void *ptr)
 	/* *zone_ref ? print_node(BG_MAGENTA, *zone_ref) : ft_putendl(" NULL"); */
 	if (remove_node(alloc_ref, node))
 	{
-		error_free_notalloc(ptr);
+		/* error_free_notalloc(ptr); */
 		return ;
 	}
 	insert_node(zone_ref, node);

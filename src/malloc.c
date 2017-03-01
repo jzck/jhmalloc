@@ -6,7 +6,7 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:28:02 by jhalford          #+#    #+#             */
-/*   Updated: 2017/02/21 16:37:32 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/03/01 12:15:24 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ void	*malloc(size_t size)
 	t_node	**node_ref;
 	t_node	*node;
 
-	ft_putstr(FG_YELLOW"malloc(");
-	ft_putnbr(size);
-	ft_putendl(")"FG_DEFAULT);
+	/* ft_putstr(FG_YELLOW"malloc("); */
+	/* ft_putnbr(size); */
+	/* ft_putendl(")"FG_DEFAULT); */
 
 	get_zones(&zone_ref, &alloc_ref, size);
 	while (!*(node_ref = find_node_firstfit(zone_ref, size)))
@@ -59,8 +59,8 @@ void	*malloc(size_t size)
 
 	node = split_node(node_ref, alloc_ref, zone_ref, size);
 
-	ft_putstr("touser@");
-	print_node(FG_RED, node);
+	/* ft_putstr("touser@"); */
+	/* print_node(FG_RED, node); */
 	/* ft_putstr("passing "FG_RED); */
 	/* ft_putnbr_hex((long)node->data); */
 	/* ft_putendl(FG_DEFAULT" to user"); */
