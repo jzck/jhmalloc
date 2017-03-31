@@ -1,23 +1,37 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: wescande <wescande@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2016/08/29 21:32:58 by wescande          #+#    #+#              #
+#    Updated: 2017/03/31 18:08:35 by jhalford         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 ifeq ($(HOSTTYPE),)
-HOSTTYPE	:= $(shell uname -m)_$(shell uname -s)
+	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
 
-NAME		=	libft_malloc.so
-ARCH_NAME	=	libft_malloc_$(HOSTTYPE).so
+NAME_BIS	=	libft_malloc.so
+NAME		=	libft_malloc_$(HOSTTYPE).so
 
 CC			=	gcc
-W_FLAGS		=	-Wall -Wextra -Werror
-V_FLAGS		=	-fvisibility=hidden
-D_FLAGS		=
-FLAGS		=	$(W_FLAGS) $(V_FLAGS) $(D_FLAGS)
+FLAGS		=	-Wall -Wextra -Werror #-fsanitize=address
+MAIN_FLAGS	=	-shared
+OBJ_FLAGS	=
 
-DELTA		=	$$(echo "$$(tput cols)-47"|bc)
+LEN_NAME	=	`printf "%s" $(NAME) |wc -c`
+DELTA		=	$$(echo "$$(tput cols)-31-$(LEN_NAME)"|bc)
 
 LIBFT_DIR	=	libft/
 LIBFT_LIB	=	$(LIBFT_DIR)libft.a
 LIBFT_INC	=	$(LIBFT_DIR)includes/
 
-SRC_DIR		=	src/
+LIBS		=
+
+SRC_DIR		=	srcs/
 INC_DIR		=	includes/
 OBJ_DIR		=	objs/
 
@@ -36,47 +50,65 @@ NB			=	$(words $(SRC_BASE))
 INDEX		=	0
 
 all :
+	@make -C $(LIBFT_DIR)
 	@make -j $(NAME)
+	@make $(NAME_BIS)
 
-$(NAME): $(LIBFT_LIB) $(OBJ_DIR) $(OBJS)
-	@$(CC) --shared $(FLAGS)\
+$(NAME):		$(LIBFT_LIB) $(OBJ_DIR) $(OBJS)
+	@$(CC) $(OBJS) -o $(NAME) \
 		-I $(INC_DIR) \
 		-I $(LIBFT_INC) \
-		$(LIBS) \
-		$(LIBFT_LIB) $(OBJS) \
-		-o $(ARCH_NAME)
-	@ln -fs $(ARCH_NAME) $(NAME)
-	@strip -x $(NAME)
-	@printf "\r\e[48;5;15;38;5;25m✅ MAKE $(ARCH_NAME)\e[0m\e[K\n"
+		$(LIBS) $(LIBFT_LIB) $(MAIN_FLAGS) $(FLAGS)
+	@printf "\r\033[38;5;117m✓ MAKE $(NAME)\033[0m\033[K\n"
+
+$(NAME_BIS):	$(NAME)
+	@if [ -L $(NAME_BIS) ]; \
+	then \
+		rm $(NAME_BIS); \
+	fi
+	@ln -s $(NAME) $(NAME_BIS)
+	@printf "\r\033[38;5;117m✓ LINK $(NAME_BIS)\033[0m\033[K\n"
 
 $(LIBFT_LIB):
-	@make -j -C $(LIBFT_DIR)
+	@make -C $(LIBFT_DIR)
 
-$(OBJ_DIR):
+$(OBJ_DIR) :
 	@mkdir -p $(OBJ_DIR)
 	@mkdir -p $(dir $(OBJS))
 
 $(OBJ_DIR)%.o :	$(SRC_DIR)%.c | $(OBJ_DIR)
 	@$(eval DONE=$(shell echo $$(($(INDEX)*20/$(NB)))))
 	@$(eval PERCENT=$(shell echo $$(($(INDEX)*100/$(NB)))))
-	@$(eval COLOR=$(shell echo $$(($(PERCENT)%35+196))))
-	@$(eval TO_DO=$(shell echo $$((20-$(INDEX)*20/$(NB)))))
-	@printf "\r\e[38;5;11m⌛ MAKE %10.10s : %2d%% \e[48;5;%dm%*s\e[0m%*s\e[48;5;255m \e[0m \e[38;5;11m %*s\e[0m\e[K" $(NAME) $(PERCENT) $(COLOR) $(DONE) "" $(TO_DO) "" $(DELTA) "$@"
-	@$(CC) $(FLAGS) -MMD -c $< -o $@\
+	@$(eval TO_DO=$(shell echo $$((20-$(INDEX)*20/$(NB) - 1))))
+	@$(eval COLOR=$(shell list=(160 196 202 208 215 221 226 227 190 154 118 82 46); index=$$(($(PERCENT) * $${#list[@]} / 100)); echo "$${list[$$index]}"))
+	@printf "\r\033[38;5;%dm⌛ [%s]: %2d%% `printf '█%.0s' {0..$(DONE)}`%*s❙%*.*s\033[0m\033[K" $(COLOR) $(NAME) $(PERCENT) $(TO_DO) "" $(DELTA) $(DELTA) "$(shell echo "$@" | sed 's/^.*\///')"
+	@$(CC) $(FLAGS) $(OBJ_FLAG) -MMD -c $< -o $@\
 		-I $(INC_DIR)\
 		-I $(LIBFT_INC)
 	@$(eval INDEX=$(shell echo $$(($(INDEX)+1))))
 
 clean:			cleanlib
-	@rm -rf $(OBJ_DIR)
-	@printf "\r\e[38;5;202m✖ clean $(NAME).\e[0m\e[K\n"
+	@if [ -e $(OBJ_DIR) ]; \
+	then \
+		rm -rf $(OBJ_DIR); \
+		printf "\r\033[38;5;202m✗ clean $(NAME).\033[0m\033[K\n"; \
+	fi;
 
 cleanlib:
 	@make -C $(LIBFT_DIR) clean
 
 fclean:			clean fcleanlib
-	@rm -f $(NAME)
-	@printf "\r\e[38;5;196m❌ fclean $(NAME).\e[0m\e[K\n"
+	@if [ -e $(NAME) ]; \
+	then \
+		rm -rf $(NAME); \
+		printf "\r\033[38;5;196m✗ fclean $(NAME).\033[0m\033[K\n"; \
+	fi;
+	@if [ -L $(NAME_BIS) ]; \
+	then \
+		rm -rf $(NAME_BIS); \
+		printf "\r\033[38;5;196m✗ delete link $(NAME_BIS).\033[0m\033[K\n"; \
+	fi;
+	@$(foreach n, $(shell echo libft_malloc_*.so), if [ -f $n ]; then rm -rf $n; printf "\r\033[38;5;196m✗ delete old lib $n.\033[0m\033[K\n"; fi;)
 
 fcleanlib:		cleanlib
 	@make -C $(LIBFT_DIR) fclean
@@ -85,9 +117,6 @@ re:				fclean all
 
 relib:			fcleanlib $(LIBFT_LIB)
 
-test:
-	gcc -lft_malloc -L. -Iincludes -I$(LIBFT_INC) -o myprogram main.c
-
-.PHONY :		fclean clean re relib cleanlib fcleanlib $(LIBFT_LIB)
+.PHONY :		fclean clean re relib cleanlib fcleanlib
 
 -include $(OBJS:.o=.d)
