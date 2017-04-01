@@ -12,49 +12,42 @@
 
 #include "malloc_internal.h"
 
-t_node	*tiny_zone;
-t_node	*small_zone;
-t_node	*large_zone;
-t_node	*tiny_alloc;
-t_node	*small_alloc;
-t_node	*large_alloc;
-
-int		coalesce_nodes(t_node **head)
+int		coalesce_nodes(t_node *node)
 {
-	while (*head)
+	t_node	*next;
+
+	if ((next = node->next) && next->isfree)
 	{
-		if ((*head)->next == *(void**)head + (*head)->size)
-		{
-			(*head)->size += (*head)->next->size;
-			(*head)->next = (*head)->next->next;
-		}
-		else
-			head = &(*head)->next;
+		node->size += next->size;
+		node->next = next->next;
 	}
 	return (0);
 }
 
 void	free(void *ptr)
 {
-	t_node	**zone_ref;
-	t_node	**alloc_ref;
+	t_chunk	*zone;
 	t_node	*node;
+	t_node	*prev;
 
-	/* ft_putstr(FG_YELLOW"free("); */
-	/* ft_putnbr_hex((long)ptr); */
-	/* ft_putendl(")"FG_DEFAULT); */
+	/* DGSH("free   i", (int)ptr); */
+	/* DGSH("free  ui", (unsigned int)ptr); */
+	/* DGSH("free  ll", (long long)ptr); */
+	DGSH("free ull", (unsigned long long)ptr);
 	if (!ptr)
 		return ;
-	node = ptr - HEADER_SIZE;
-	get_zones(&zone_ref, &alloc_ref, node->size);
-	/* ft_putstr("zone  @"); */
-	/* *zone_ref ? print_node(BG_MAGENTA, *zone_ref) : ft_putendl(" NULL"); */
-	if (remove_node(alloc_ref, node))
+	node = ptr - M_NODEHEAD;
+	DGSN("node->size", node->size);
+	zone = get_zone(node->size);
+	DGSH("free", (long)ptr);
+	if (!(prev = find_prev_node(zone, node)))
 	{
-		/* error_free_notalloc(ptr); */
+		error_free_notalloc(ptr);
 		return ;
 	}
-	insert_node(zone_ref, node);
-	coalesce_nodes(zone_ref);
-	/* ft_putendl(BG_GREEN"SUCCESSFUL FREE"BG_DEFAULT); */
+	DGSH("free", (long)ptr);
+	coalesce_nodes(node);
+	DGSH("free", (long)ptr);
+	coalesce_nodes(prev);
+	DGS("successful free");
 }

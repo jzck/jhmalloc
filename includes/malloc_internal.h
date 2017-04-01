@@ -13,44 +13,47 @@
 #ifndef MALLOC_INTERNAL_H
 # define MALLOC_INTERNAL_H
 
-# define malloc_n			64
-# define malloc_m			1024
-# define malloc_N			(1 * getpagesize())
-# define malloc_M			(2 * getpagesize())
-# define malloc_magic		1234567
-# define HEADER_SIZE		(sizeof(t_node) - alignof(t_node))
-# define TINY(x)			(x < (malloc_n + 1))
-# define SMALL(x)			(!TINY(x) && !LARGE(x))
-# define LARGE(x)			(malloc_m < x)
+# define M_NTINY			(64)
+# define M_NSMALL			(1024)
+# define M_PAGEALIGN(x)		((x / getpagesize() + 1) * getpagesize())
+# define M_TINYCHUNK		(M_PAGEALIGN(101 * M_NTINY))
+# define M_SMALLCHUNK		(M_PAGEALIGN(101 * M_NSMALL))
+# define M_MAGIC			1234567
+# define M_CHUNKHEAD		(sizeof(t_chunk) - alignof(t_chunk))
+# define M_NODEHEAD			(sizeof(t_node) - alignof(t_node))
+# define M_ISTINY(x)		(x < (M_NTINY + 1))
+# define M_ISSMALL(x)		(!M_TINY(x) && !M_LARGE(x))
+# define M_ISLARGE(x)		(M_SMALL < x)
 
 #include "libft.h"
 #include <sys/mman.h>
 #include <stdalign.h>
 
-typedef struct	s_header {
-	int 		size;
-	int 		magic;
-}				t_header;
+typedef struct		s_chunk {
+	struct s_chunk	*next;
+}					t_chunk;
 
 typedef struct		s_node {
-	int				size;
 	struct s_node	*next;
-	char			data[1];
+	size_t			size;
+	int				isfree:1;
 }					t_node;
 
-extern t_node	*tiny_zone;
-extern t_node	*small_zone;
-extern t_node	*tiny_alloc;
-extern t_node	*small_alloc;
+enum				e_zones {
+	M_TINY,
+	M_SMALL,
+	M_LARGE,
+	M_ZONES_MAX,
+};
+
+extern t_chunk	*g_zones[M_ZONES_MAX];
 
 #include "malloc.h"
 
-void	get_zones(t_node ***zone_ref, t_node ***alloc_ref, size_t size);
-
-void	insert_node(t_node **head, t_node *node);
-int		remove_node(t_node **head, t_node *node);
-t_node	*split_node(t_node **node, t_node **alloc, t_node **zone, size_t size);
-t_node	**find_node_firstfit(t_node **node, size_t size);
+t_chunk		*get_zone(size_t size);
+t_node		*find_node_firstfit(t_chunk *chunk, size_t size);
+t_node		*find_prev_node(t_chunk *zone, t_node *node);
+int			split_node(t_node *node, size_t size);
 
 void	show_free_mem(void);
 void	print_node(char fg[7], t_node *node);

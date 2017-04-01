@@ -12,57 +12,41 @@
 
 #include "malloc_internal.h"
 
-t_node	*tiny_zone;
-t_node	*small_zone;
-t_node	*large_zone;
-t_node	*tiny_alloc;
-t_node	*small_alloc;
-t_node	*large_alloc;
-
-void	add_chunk(t_node **zone_ref, size_t size)
+void	add_chunk(t_chunk **chunk, size_t size)
 {
-	size_t	chunk_size;
+	int		chunk_size;
+	t_chunk	*new;
 	t_node	*node;
 
-	/* while (*node_ref) */
-	/* 	node_ref = &(*node_ref)->next; */
-	if (LARGE(size))
-		chunk_size = size + HEADER_SIZE;
+	if (M_ISLARGE(size))
+		chunk_size = M_PAGEALIGN(size);
 	else
-		chunk_size = TINY(size) ? malloc_N : malloc_M;
-	if (!(node = mmap(NULL, chunk_size, PROT_READ|PROT_WRITE,
-				MAP_ANON|MAP_PRIVATE, -1, 0)))
+		chunk_size = M_ISTINY(size) ? M_TINYCHUNK : M_SMALLCHUNK;
+	if (!(new = mmap(NULL, chunk_size, PROT_READ|PROT_WRITE,
+					MAP_ANON|MAP_PRIVATE, -1, 0)))
 		error_mmap();
-	node->size = chunk_size;
-	insert_node(zone_ref, node);
-	/* ft_putstr("nchunk@"); */
-	/* print_node(BG_GREEN, node); */
+	new->next = *chunk;
+	*chunk = new;
+	node = (t_node*)(*chunk + 1);
+	node->size = chunk_size - M_CHUNKHEAD;
+	node->next = 0;
+	node->isfree = 1;
 }
 
 void	*malloc(size_t size)
 {
-	t_node	**zone_ref;
-	t_node	**alloc_ref;
-	t_node	**node_ref;
+	t_chunk	*zone;
 	t_node	*node;
+	void	*ret;
 
-	/* ft_putstr(FG_YELLOW"malloc("); */
-	/* ft_putnbr(size); */
-	/* ft_putendl(")"FG_DEFAULT); */
-
-	get_zones(&zone_ref, &alloc_ref, size);
-	while (!*(node_ref = find_node_firstfit(zone_ref, size)))
-		add_chunk(zone_ref, size);
-
-	/* ft_putstr("found @"); */
-	/* print_node(FG_GREEN, *node_ref); */
-
-	node = split_node(node_ref, alloc_ref, zone_ref, size);
-
-	/* ft_putstr("touser@"); */
-	/* print_node(FG_RED, node); */
-	/* ft_putstr("passing "FG_RED); */
-	/* ft_putnbr_hex((long)node->data); */
-	/* ft_putendl(FG_DEFAULT" to user"); */
-	return (node->data);
+	DGSN("malloc", size);
+	size += M_NODEHEAD;
+	zone = get_zone(size);
+	DGSH("zone", (long)zone);
+	while (!(node = find_node_firstfit(zone, size)))
+		add_chunk(&zone, size);
+	split_node(node, size);
+	ret = (void*)node + M_NODEHEAD;
+	DGSH("to user", (long)ret);
+	return (ret);
 }

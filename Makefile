@@ -38,7 +38,7 @@ OBJ_DIR		=	objs/
 SRC_BASE	=	\
 error_lib.c\
 free.c\
-get_zones.c\
+get_zone.c\
 malloc.c\
 node_lib.c\
 realloc.c\

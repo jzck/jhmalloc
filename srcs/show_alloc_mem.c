@@ -23,9 +23,9 @@ void	print_node(char color[7], t_node *node)
 {
 	ft_putstr("\t");
 	ft_putstr(color);
-	ft_putnbr_hex((long)node->data);
+	/* ft_putnbr_hex((long)node->data); */
 	ft_putstr(" - ");
-	ft_putnbr_hex((long)node->data + node->size);
+	/* ft_putnbr_hex((long)node->data + node->size); */
 	ft_putstr(FBG_DEFAULT" : ");
 	ft_putnbr(node->size);
 	ft_putendl(" bytes");

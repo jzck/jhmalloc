@@ -12,72 +12,51 @@
 
 #include "malloc_internal.h"
 
-t_node	**find_node_firstfit(t_node **node, size_t size)
+t_node	*find_node_firstfit(t_chunk *chunk, size_t size)
 {
-	/* if (*node) */
-	/* { */
-	/* 	ft_putstr("startf@"); */
-	/* 	print_node(BG_CYAN, *node); */
-	/* } */
-	while (*node && (size_t)(*node)->size < size + HEADER_SIZE)
+	t_node	*node;
+
+	if (!chunk)
+		return (NULL);
+	node = (t_node*)(chunk + 1);
+	while (node && !(node->isfree && node->size >= size))
 	{
-		node = &(*node)->next;
-		/* ft_putstr("firstf@"); */
-		/* print_node(FG_GREEN, *node); */
+		node = node->next;
 	}
 	return (node);
 }
 
-t_node	*split_node(t_node **node, t_node **alloc, t_node **zone, size_t size)
+int		split_node(t_node *node, size_t size)
 {
-	t_node	*new_alloc;
-	int		free_size;
+	t_node	*new_node;
 
-	free_size = (*node)->size;
-	new_alloc = *node;
-	/* ft_putstr("node->data @ ["); */
-	/* ft_putaddr((*node)->data); */
-	/* ft_putendl("]"); */
-	*node = (t_node*)((*node)->data + size);
-	/* ft_putstr("node @ ["); */
-	/* ft_putaddr(*node); */
-	/* ft_putendl("]"); */
-	(*node)->size = free_size - (size + HEADER_SIZE);
-	if ((*node)->size == 0)
-		remove_node(zone, *node);
-	new_alloc->size = size;
-	insert_node(alloc, new_alloc);
-	return (new_alloc);
+	new_node = (void*)node + size;
+	new_node->next = node->next;
+	new_node->size = node->next - new_node;
+	new_node->isfree = 1;
+	node->next = new_node;
+	node->size -= new_node->size;
+	node->isfree = 0;
+	return (0);
 }
 
-
-int		remove_node(t_node **head, t_node *node)
+t_node	*find_prev_node(t_chunk *zone, t_node *node)
 {
-	while (*head)
+	t_node	*n;
+	t_node	*prev;
+
+	while (zone)
 	{
-		/* ft_putstr("looking for node -> ["); */
-		/* ft_putnbr_hex((long)node); */
-		/* ft_putstr(","); */
-		/* ft_putnbr_hex((long)*head); */
-		/* ft_putendl("]"); */
-		if (*head == node)
+		n = (t_node*)(zone + 1);
+		prev = n;
+		while (n)
 		{
-			*head = (*head)->next;
-			return (0);
+			if (n == node)	
+				return (prev);
+			prev = n;
+			n = n->next;
 		}
-		head = &(*head)->next;
+		zone = zone->next;
 	}
-	return (1);
-}
-
-void	insert_node(t_node **head, t_node *new)
-{
-	while (*head)
-	{
-		if (new < *head)
-			break ;
-		head = &(*head)->next;
-	}
-	new->next = *head;
-	*head = new;
+	return (NULL);
 }

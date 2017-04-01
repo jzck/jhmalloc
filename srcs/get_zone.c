@@ -12,23 +12,17 @@
 
 #include "malloc_internal.h"
 
-t_node	*tiny_zone = NULL;
-t_node	*small_zone = NULL;
-t_node	*large_zone = NULL;
-t_node	*tiny_alloc = NULL;
-t_node	*small_alloc = NULL;
-t_node	*large_alloc = NULL;
-
-void	get_zones(t_node ***zone_ref, t_node ***alloc_ref, size_t size)
+t_chunk		*g_zones[M_ZONES_MAX] =
 {
-	if (LARGE(size))
-	{
-		*zone_ref = &large_zone;
-		*alloc_ref = &large_alloc;
-	}
+	NULL,
+	NULL,
+	NULL,
+};
+
+t_chunk		*get_zone(size_t size)
+{
+	if (M_ISLARGE(size))
+		return (g_zones[M_LARGE]);
 	else
-	{
-		*zone_ref = TINY(size) ? &tiny_zone : &small_zone;
-		*alloc_ref = TINY(size) ? &tiny_alloc : &small_alloc;
-	}
+		return (g_zones[M_ISTINY(size) ? M_TINY : M_SMALL]);
 }

@@ -6,7 +6,6 @@ int		main(void)
 	char	*addr;
 
 	i = 0;
-	valloc(42);
 	while (i < 1024)
 	{
 		i++;
