@@ -18,7 +18,7 @@ NAME_BIS	=	libft_malloc.so
 NAME		=	libft_malloc_$(HOSTTYPE).so
 
 CC			=	gcc
-FLAGS		=	-Wall -Wextra -Werror #-fsanitize=address
+FLAGS		=	-Wall -Wextra -Werror -fPIC #-fsanitize=address
 MAIN_FLAGS	=	-shared
 OBJ_FLAGS	=
 
@@ -48,6 +48,8 @@ SRCS		=	$(addprefix $(SRC_DIR), $(SRC_BASE))
 OBJS		=	$(addprefix $(OBJ_DIR), $(SRC_BASE:.c=.o))
 NB			=	$(words $(SRC_BASE))
 INDEX		=	0
+
+SHELL		:=	/bin/bash
 
 all :
 	@make -C $(LIBFT_DIR)

@@ -16,7 +16,7 @@ void	error_free_notalloc(void *ptr)
 {
 	int		fd;
 
-	fd = 1;
+	fd = 2;
 	ft_putstr_fd(FG_RED"(", fd);
 	ft_putnbr_fd(getpid(), fd);
 	ft_putstr_fd(", ??? ", fd);
@@ -31,7 +31,7 @@ void	error_mmap(void)
 {
 	int		fd;
 
-	fd = 1;
+	fd = 2;
 	ft_putstr_fd(FG_RED"(", fd);
 	ft_putnbr_fd(getpid(), fd);
 	ft_putstr_fd(", ??? ", fd);
