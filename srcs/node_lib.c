@@ -6,7 +6,7 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:28:15 by jhalford          #+#    #+#             */
-/*   Updated: 2017/03/01 12:04:08 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/10/07 17:09:11 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@ t_node	*find_node_firstfit(t_chunk *chunk, size_t size)
 	if (!chunk)
 		return (NULL);
 	node = (t_node*)(chunk + 1);
-	while (node && !(node->isfree && node->size >= size))
+	while (node)
 	{
-		node = node->next;
+		if (node->isfree && node->size >= size)
+			break ;
+		node = NEXT(node);
 	}
 	return (node);
 }
@@ -30,13 +32,15 @@ int		split_node(t_node *node, size_t size)
 {
 	t_node	*new_node;
 
-	new_node = (void*)node + size;
-	new_node->next = node->next;
-	new_node->size = node->next - new_node;
-	new_node->isfree = 1;
-	node->next = new_node;
-	node->size -= new_node->size;
 	node->isfree = 0;
+	if (node->size - size <= M_NODEHEAD)
+		return (0);
+	new_node = (void*)node + size;
+	new_node->size = node->size - size;
+	new_node->isfree = 1;
+	new_node->islast = node->islast;
+	node->islast = 0;
+	node->size = size;
 	return (0);
 }
 
@@ -51,10 +55,10 @@ t_node	*find_prev_node(t_chunk *zone, t_node *node)
 		prev = n;
 		while (n)
 		{
-			if (n == node)	
+			if (n == node)
 				return (prev);
 			prev = n;
-			n = n->next;
+			n = NEXT(n);
 		}
 		zone = zone->next;
 	}

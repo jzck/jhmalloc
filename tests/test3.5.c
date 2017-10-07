@@ -15,11 +15,11 @@ int		main(void)
 	char	*addr2;
 	char	*addr3;
 
-	addr1 = (char*)malloc(16*M);
+	addr1 = (char*)ft_malloc(16*M);
 	strcpy(addr1, "Bonjours\n");
 	print(addr1);
-	addr2 = (char*)malloc(16*M);
-	addr3 = (char*)realloc(addr1, 128*M);
+	addr2 = (char*)ft_malloc(16*M);
+	addr3 = (char*)ft_realloc(addr1, 128*M);
 	addr3[127*M] = 42;
 	print(addr3);
 	return (0);

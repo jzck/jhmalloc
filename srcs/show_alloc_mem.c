@@ -6,60 +6,65 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:28:20 by jhalford          #+#    #+#             */
-/*   Updated: 2017/02/21 16:37:55 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/10/07 17:06:14 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc_internal.h"
 
-t_node	*tiny_zone;
-t_node	*small_zone;
-t_node	*large_zone;
-t_node	*tiny_alloc;
-t_node	*small_alloc;
-t_node	*large_alloc;
+t_chunk		*g_zones[M_ZONES_MAX];
 
 void	print_node(char color[7], t_node *node)
 {
 	ft_putstr("\t");
 	ft_putstr(color);
-	/* ft_putnbr_hex((long)node->data); */
+	ft_putnbr_hex((long)(node));
 	ft_putstr(" - ");
-	/* ft_putnbr_hex((long)node->data + node->size); */
+	ft_putnbr_hex((long)(node + 1));
+	ft_putstr(" - ");
+	ft_putnbr_hex((long)((void*)node + node->size));
 	ft_putstr(FBG_DEFAULT" : ");
 	ft_putnbr(node->size);
-	ft_putendl(" bytes");
+	ft_putstr(" bytes");
+	ft_putchar('\n');
 }
 
-void	show_alloc_zone(char *name, t_node *alloc, t_node *zone, size_t (*total)[3])
+void	show_chunk(char *name, t_chunk *chunk, int dump)
 {
-	if (alloc || zone)
-		ft_putstr(name);
-	while (alloc)
+	t_node	*node;
+
+	ft_putstr(name);
+	if (!chunk)
 	{
-		print_node(FG_RED, alloc);
-		(*total)[1] += alloc->size;
-		alloc = alloc->next;
+		ft_putstr("empty");
+		ft_putchar('\n');
+		return ;
 	}
-	while (zone)
+	while (chunk)
 	{
-		print_node(FG_GREEN, zone);
-		(*total)[0] += zone->size;
-		zone = zone->next;
+		ft_putchar('\n');
+		node = (t_node*)(chunk + 1);
+		while (node)
+		{
+			print_node(node->isfree ? FG_GREEN : FG_RED, node);
+			if (dump && !node->isfree)
+				hexdump(node, M_NODEHEAD, node->size - M_NODEHEAD);
+			node = NEXT(node);
+		}
+		chunk = chunk->next;
 	}
 }
 
 void	show_alloc_mem(void)
 {
-	size_t	total[3];
+	show_chunk("TINY: ", g_zones[M_TINY], 0);
+	show_chunk("SMALL: ", g_zones[M_SMALL], 0);
+	show_chunk("LARGE: ", g_zones[M_LARGE], 0);
+}
 
-	total[0] = 0;
-	total[1] = 0;
-	show_alloc_zone("TINY:", tiny_alloc, tiny_zone, &total);
-	show_alloc_zone("SMALL:", small_alloc, small_zone, &total);
-	show_alloc_zone("LARGE:", large_alloc, large_zone, &total);
-	printf("Total:");
-	printf("\t%7zu bytes free\n", total[0]);
-	printf("\t%7zu bytes allocated\n", total[1]);
-	printf("\t%7zu bytes mmap'd\n", total[0] + total[1]);
+void	dump_alloc_mem(void)
+{
+	show_chunk("TINY: ", g_zones[M_TINY], 1);
+	show_chunk("SMALL: ", g_zones[M_SMALL], 1);
+	show_chunk("LARGE: ", g_zones[M_LARGE], 1);
 }

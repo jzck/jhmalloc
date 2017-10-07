@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_zones.c                                        :+:      :+:    :+:   */
+/*   ft_putchar.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/02/18 17:53:41 by jhalford          #+#    #+#             */
-/*   Updated: 2017/02/18 20:06:53 by jhalford         ###   ########.fr       */
+/*   Created: 2017/10/07 17:07:04 by jhalford          #+#    #+#             */
+/*   Updated: 2017/10/07 17:07:06 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc_internal.h"
 
-t_chunk		*g_zones[M_ZONES_MAX] =
+int		ft_putchar_fd(char c, int fd)
 {
-	NULL,
-	NULL,
-	NULL,
-};
+	return (write(fd, &c, 1));
+}
 
-t_chunk		*get_zone(size_t size)
+int		ft_putchar(char c)
 {
-	if (M_ISLARGE(size))
-		return (g_zones[M_LARGE]);
-	else
-		return (g_zones[M_ISTINY(size) ? M_TINY : M_SMALL]);
+	return (write(1, &c, 1));
 }
