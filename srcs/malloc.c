@@ -6,7 +6,7 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:28:02 by jhalford          #+#    #+#             */
-/*   Updated: 2017/10/07 17:10:38 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/10/08 17:29:52 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void		*ft_malloc(size_t size)
 	t_node	*node;
 	void	*ret;
 
-	g_malloc_debug = 1;
 	if (g_malloc_debug >= 1)
 		DGSN("malloc called with size", size);
 	if (g_malloc_debug >= 2)

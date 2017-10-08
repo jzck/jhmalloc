@@ -6,7 +6,7 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 23:00:24 by jhalford          #+#    #+#             */
-/*   Updated: 2017/10/07 17:08:37 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/10/08 18:16:21 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,5 +121,6 @@ int			ft_putnbr(long n);
 int			ft_putnbr_fd(long n, int fd);
 int			ft_putnbr_hex(long n);
 int			ft_putnbr_hex_fd(long n, int fd);
+int			ft_putnbr_loop(long n, int base, int fd);
 
 #endif

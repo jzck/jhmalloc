@@ -35,7 +35,6 @@ free.c\
 ft_putchar.c\
 ft_putnbr.c\
 ft_putstr.c\
-get_zone.c\
 hexdump.c\
 malloc.c\
 node_lib.c\
