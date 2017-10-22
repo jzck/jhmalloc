@@ -6,7 +6,7 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:28:02 by jhalford          #+#    #+#             */
-/*   Updated: 2017/10/22 17:29:44 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/10/22 18:45:48 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void		*ft_malloc(size_t size)
 	t_node	*node;
 	void	*ret;
 
-	g_malloc_debug = 0;
 	if (g_malloc_debug >= 2)
 		show_alloc_mem();
 	size += M_NODEHEAD;
