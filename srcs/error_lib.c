@@ -6,7 +6,7 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 19:34:23 by jhalford          #+#    #+#             */
-/*   Updated: 2017/10/07 17:06:51 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/10/22 11:29:39 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	error_free_notalloc(void *ptr)
 	fd = 2;
 	ft_putstr_fd(FG_RED"(", fd);
 	ft_putnbr_fd(getpid(), fd);
-	ft_putstr_fd(", ??? ", fd);
 	ft_putstr_fd(")", fd);
 	ft_putstr_fd(" malloc: error for object ", fd);
 	ft_putnbr_hex_fd((long)ptr, fd);
@@ -33,7 +32,6 @@ void	error_mmap(void)
 	fd = 2;
 	ft_putstr_fd(FG_RED"(", fd);
 	ft_putnbr_fd(getpid(), fd);
-	ft_putstr_fd(", ??? ", fd);
 	ft_putstr_fd(")", fd);
 	ft_putendl_fd(" malloc: mmap failed", fd);
 }

@@ -6,19 +6,20 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:28:03 by jhalford          #+#    #+#             */
-/*   Updated: 2017/10/07 16:29:44 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/10/22 17:32:14 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc_internal.h"
+#include <dlfcn.h>
 
-volatile int		g_malloc_debug;
+int			g_malloc_debug;
+t_chunk		*g_zones[M_ZONES_MAX];
 
 int		coalesce_nodes(t_node *node)
 {
 	t_node	*next;
 
-	show_alloc_mem();
 	if (node->islast)
 		return (0);
 	next = (void*)node + node->size;
@@ -35,33 +36,27 @@ int		coalesce_nodes(t_node *node)
 	return (0);
 }
 
-int		ret_free(void *ptr)
+int		ft_free(void *ptr)
 {
-	t_chunk	*zone;
 	t_node	*node;
 	t_node	*prev;
 
 	if (!ptr)
 		return (2);
+	if (g_malloc_debug >= 2)
+		show_alloc_mem();
 	node = ptr - M_NODEHEAD;
-	zone = *get_zone(node->size);
-	if (!(prev = find_prev_node(zone, node)))
+	if (!((prev = find_prev_node(g_zones[M_TINY], node))
+				|| (prev = find_prev_node(g_zones[M_SMALL], node))
+				|| (prev = find_prev_node(g_zones[M_LARGE], node))))
 	{
+		if (g_malloc_debug >= 2)
+			error_free_notalloc(ptr);
 		return (1);
 	}
 	node->isfree = 1;
 	coalesce_nodes(prev);
-	return (0);
-}
-
-void	ft_free(void *ptr)
-{
-	if (g_malloc_debug >= 1)
-		DGSH("free called with addr", (long)ptr);
 	if (g_malloc_debug >= 2)
 		show_alloc_mem();
-	if (ret_free(ptr) == 1)
-		error_free_notalloc(ptr);
-	if (g_malloc_debug >= 1)
-		show_alloc_mem();
+	return (0);
 }

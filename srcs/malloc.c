@@ -6,20 +6,15 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:28:02 by jhalford          #+#    #+#             */
-/*   Updated: 2017/10/08 17:29:52 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/10/22 17:29:44 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc_internal.h"
 
-t_chunk		*g_zones[M_ZONES_MAX] =
-{
-	NULL,
-	NULL,
-	NULL,
-};
-
-volatile int			g_malloc_debug = 0;
+t_chunk			*g_zones[M_ZONES_MAX];
+int				g_malloc_debug;
+pthread_mutex_t	g_mutex;
 
 t_chunk		**get_zone(size_t size)
 {
@@ -46,7 +41,7 @@ void		add_chunk(t_chunk **chunk, size_t size)
 					MAP_ANON | MAP_PRIVATE, -1, 0)))
 		error_mmap();
 	if (g_malloc_debug >= 3)
-		DGSN("malloc_debug", g_malloc_debug);
+		DGSH("mmap returned", (long)new);
 	new->next = *chunk;
 	*chunk = new;
 	node = (t_node*)(*chunk + 1);
@@ -61,13 +56,9 @@ void		*ft_malloc(size_t size)
 	t_node	*node;
 	void	*ret;
 
-	if (g_malloc_debug >= 1)
-		DGSN("malloc called with size", size);
+	g_malloc_debug = 0;
 	if (g_malloc_debug >= 2)
-	{
-		DGSN("malloc", size);
 		show_alloc_mem();
-	}
 	size += M_NODEHEAD;
 	zone = get_zone(size);
 	while (!(node = find_node_firstfit(*zone, size)))
@@ -75,9 +66,8 @@ void		*ft_malloc(size_t size)
 	split_node(node, size);
 	ret = (void*)(node + 1);
 	if (g_malloc_debug >= 1)
-	{
 		DGSH("user got ptr", (long)ret);
+	if (g_malloc_debug >= 2)
 		show_alloc_mem();
-	}
 	return (ret);
 }

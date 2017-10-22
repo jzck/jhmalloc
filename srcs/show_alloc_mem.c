@@ -6,7 +6,7 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:28:20 by jhalford          #+#    #+#             */
-/*   Updated: 2017/10/07 17:06:14 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/10/22 13:37:38 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,4 @@ void	show_chunk(char *name, t_chunk *chunk, int dump)
 		}
 		chunk = chunk->next;
 	}
-}
-
-void	show_alloc_mem(void)
-{
-	show_chunk("TINY: ", g_zones[M_TINY], 0);
-	show_chunk("SMALL: ", g_zones[M_SMALL], 0);
-	show_chunk("LARGE: ", g_zones[M_LARGE], 0);
-}
-
-void	dump_alloc_mem(void)
-{
-	show_chunk("TINY: ", g_zones[M_TINY], 1);
-	show_chunk("SMALL: ", g_zones[M_SMALL], 1);
-	show_chunk("LARGE: ", g_zones[M_LARGE], 1);
 }

@@ -6,7 +6,7 @@
 #    By: wescande <wescande@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/08/29 21:32:58 by wescande          #+#    #+#              #
-#    Updated: 2017/10/07 13:15:40 by jhalford         ###   ########.fr        #
+#    Updated: 2017/10/22 13:19:38 by jhalford         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,8 @@ NAME_BIS	=	libft_malloc.so
 NAME		=	libft_malloc_$(HOSTTYPE).so
 
 CC			=	gcc
-FLAGS		=	-Wall -Wextra -Werror -fPIC #-fsanitize=address
-MAIN_FLAGS	=	-shared
+FLAGS		=	-Wall -Wextra -Werror -fvisibility=hidden -fPIC
+MAIN_FLAGS	=	-shared -fPIC
 OBJ_FLAGS	=
 
 LEN_NAME	=	`printf "%s" $(NAME) |wc -c`
@@ -30,16 +30,23 @@ INC_DIR		=	includes/
 OBJ_DIR		=	objs/
 
 SRC_BASE	=	\
+calloc.c\
 error_lib.c\
 free.c\
+ft_memcpy.c\
+ft_memset.c\
 ft_putchar.c\
 ft_putnbr.c\
 ft_putstr.c\
 hexdump.c\
+interface.c\
+interface_extended.c\
 malloc.c\
 node_lib.c\
 realloc.c\
-show_alloc_mem.c
+reallocf.c\
+show_alloc_mem.c\
+valloc.c
 
 SRCS		=	$(addprefix $(SRC_DIR), $(SRC_BASE))
 OBJS		=	$(addprefix $(OBJ_DIR), $(SRC_BASE:.c=.o))
@@ -56,6 +63,7 @@ $(NAME):		$(OBJ_DIR) $(OBJS)
 	@$(CC) $(OBJS) -o $(NAME) \
 		-I $(INC_DIR) \
 		$(LIBS) $(MAIN_FLAGS) $(FLAGS)
+	@strip -x $@
 	@printf "\r\033[38;5;117m✓ MAKE $(NAME)\033[0m\033[K\n"
 
 $(NAME_BIS):	$(NAME)
@@ -102,6 +110,6 @@ fclean:			clean fcleanlib
 
 re:				fclean all
 
-.PHONY :		fclean clean re relib cleanlib fcleanlib
+.PHONY :		fclean clean re relib cleanlib fcleanlib tests
 
 -include $(OBJS:.o=.d)
