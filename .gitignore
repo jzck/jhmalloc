@@ -4,3 +4,4 @@ libft_malloc_*.so
 libft_malloc.so
 tests/*
 !test/*.c
+.bin
