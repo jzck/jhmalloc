@@ -7,7 +7,6 @@ int		main(void)
 	char	*addr;
 
 	i = 0;
-	printf("check");
 	while (i < 1024)
 	{
 		i++;

@@ -6,7 +6,7 @@
 /*   By: jhalford <jack@crans.org>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/22 13:25:32 by jhalford          #+#    #+#             */
-/*   Updated: 2017/10/22 17:34:54 by jhalford         ###   ########.fr       */
+/*   Updated: 2017/10/23 19:41:14 by jhalford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_chunk			*g_zones[M_ZONES_MAX] =
 	NULL,
 	NULL,
 };
-int				g_malloc_debug = 0;
+int				g_malloc_debug = 1;
 pthread_mutex_t	g_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void			*malloc(size_t size)
